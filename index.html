@@ -20,7 +20,23 @@
             color: #333;
             background-color: #f5f7fa;
             padding-top: 60px;
+            opacity: 0;
+            animation: pageFadeIn 0.8s ease forwards;
         }
+        @keyframes pageFadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes blockSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section {
+            animation: blockSlideUp 0.6s ease forwards;
+        }
+        #home { animation-delay: 0.1s; }
+        #about { animation-delay: 0.25s; }
+        #hobby { animation-delay: 0.4s; }
+        #message { animation-delay: 0.55s; }
 
         .navbar {
             position: fixed;
@@ -30,6 +46,11 @@
             color: white;
             z-index: 100;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: background 0.3s ease;
+        }
+        .navbar.scroll-trans {
+            background: rgba(44, 123, 229, 0.85);
+            backdrop-filter: blur(4px);
         }
 
         .nav-container {
@@ -61,17 +82,32 @@
             color: white;
             text-decoration: none;
             font-size: 16px;
+            position: relative;
             transition: color 0.3s;
         }
-
+        .nav-menu a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
         .nav-menu a:hover {
             color: #d1e3ff;
+        }
+        .nav-menu a:hover::after {
+            width: 100%;
         }
 
         .section {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
+            opacity: 0;
         }
 
         .section-title {
@@ -104,6 +140,7 @@
         }
         .banner-content a{
             color:#fff;
+            text-decoration: underline;
         }
 
         .about-content {
@@ -114,6 +151,11 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .about-content:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         }
 
         .about-img {
@@ -144,6 +186,21 @@
 
         .about-text a{
             color:#2c7be5;
+            text-decoration: none;
+            position: relative;
+        }
+        .about-text a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: #2c7be5;
+            transition: width 0.3s ease;
+        }
+        .about-text a:hover::after {
+            width: 100%;
         }
 
         .carousel {
@@ -164,12 +221,17 @@
             height: 100%;
             opacity: 0;
             transition: opacity 0.5s ease;
+            overflow: hidden;
         }
 
         .slide-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .carousel:hover .slide-item img {
+            transform: scale(1.04);
         }
 
         .carousel-btn {
@@ -227,6 +289,11 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .message-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         }
 
         .form-group {
@@ -247,6 +314,12 @@
             border-radius: 4px;
             font-size: 14px;
             font-family: inherit;
+            transition: border 0.3s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2c7be5;
         }
 
         .form-group textarea {
@@ -263,11 +336,12 @@
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         .submit-btn:hover {
             background-color: #1a66d1;
+            transform: scale(1.01);
         }
 
         .message-list {
@@ -282,6 +356,10 @@
         .message-item {
             padding: 15px;
             border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        .message-item:hover {
+            background: #f8faff;
         }
 
         .message-item:last-child {
@@ -326,6 +404,10 @@
         }
         footer a{
             color:#73b0ff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
 
         #backTop {
@@ -340,9 +422,14 @@
             border-radius: 50%;
             font-size: 18px;
             cursor: pointer;
-            display: none;
             z-index: 99;
-            transition: background-color 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #backTop.show-btn {
+            opacity: 1;
+            visibility: visible;
         }
 
         #backTop:hover {
@@ -456,6 +543,8 @@
         const slides = document.querySelectorAll('.slide-item');
         const dots = document.querySelectorAll('.dot');
         const totalSlides = slides.length;
+        const navBar = document.querySelector('.navbar');
+        const backTopBtn = document.getElementById('backTop');
 
         function showSlide(index) {
             if (index < 0) currentIndex = totalSlides - 1;
@@ -568,23 +657,25 @@
 
         renderMessages();
 
-        const backTop = document.getElementById('backTop');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backTop.style.display = 'block';
+            if (window.scrollY > 80) {
+                navBar.classList.add('scroll-trans');
             } else {
-                backTop.style.display = 'none';
+                navBar.classList.remove('scroll-trans');
+            }
+            if (window.scrollY > 500) {
+                backTopBtn.classList.add('show-btn');
+            } else {
+                backTopBtn.classList.remove('show-btn');
             }
         });
 
-        backTop.addEventListener('click', () => {
+        backTopBtn.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         });
     </script>
-</body>
-</html>
 </body>
 </html>
