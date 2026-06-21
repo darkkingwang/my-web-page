@@ -97,10 +97,13 @@
             margin-bottom: 15px;
         }
 
-        .banner-content p {
+        .banner p {
             font-size: 18px;
             text-align: center;
             opacity: 0.9;
+        }
+        .banner-content a{
+            color:#fff;
         }
 
         .about-content {
@@ -350,15 +353,14 @@
 <body>
     <header class="navbar">
         <div class="nav-container">
-            <div class="nav-title">
-                <a href="https://github.com/darkkingwang/my-web-page" target="_blank">个人兴趣主页</a>
-            </div>
+            <div class="nav-title">个人兴趣主页</div>
             <ul class="nav-menu">
                 <li><a href="#home">首页</a></li>
                 <li><a href="#about">关于我</a></li>
                 <li><a href="#hobby">兴趣展示</a></li>
                 <li><a href="#message">留言板</a></li>
                 <li><a href="https://github.com/darkkingwang/my-web-page" target="_blank">源码仓库</a></li>
+                <li><a href="https://darkkingwang.github.io/my-web-page/" target="_blank">本站公网链接</a></li>
             </ul>
         </div>
     </header>
@@ -367,6 +369,7 @@
         <div class="banner-content">
             <h1>欢迎来到我的个人主页</h1>
             <p>Web编程基础课程设计作品</p>
+            <p style="margin-top:12px;">本站公网访问地址：<a href="https://darkkingwang.github.io/my-web-page/" target="_blank">https://darkkingwang.github.io/my-web-page/</a></p>
         </div>
     </section>
 
@@ -379,11 +382,12 @@
             <div class="about-text">
                 <h3>你好，我是一名Web编程学习者</h3>
                 <p>
-                    我是枣庄学院的信息科学与工程学院的学生，目前正在学习Web前端开发相关知识。
+                    我是枣庄学院信息科学与工程学院的学生，目前正在学习Web前端开发相关知识。
                     我对前端开发有着浓厚的兴趣，喜欢通过代码实现各种精美的页面和有趣的交互效果。
                     本页面是我的Web编程基础课程设计作品，使用原生HTML、CSS和JavaScript开发完成，
                     涵盖了页面布局、样式美化、交互逻辑等前端基础能力。
-                    项目完整源码存放于 <a href="https://github.com/darkkingwang/my-web-page" target="_blank">GitHub仓库</a>。
+                    项目完整源码存放于 <a href="https://github.com/darkkingwang/my-web-page" target="_blank">GitHub仓库</a>，
+                    网页公网访问地址：<a href="https://darkkingwang.github.io/my-web-page/" target="_blank">https://darkkingwang.github.io/my-web-page/</a>。
                 </p>
             </div>
         </div>
@@ -441,7 +445,7 @@
 
     <footer>
         <p>© 2026 个人兴趣展示网页 | Web编程基础课程设计</p>
-        <p>在线访问地址：<a href="https://darkkingwang.github.io/my-web-page/" target="_blank">https://darkkingwang.github.io/my-web-page/</a></p>
+        <p>本站公网访问链接：<a href="https://darkkingwang.github.io/my-web-page/" target="_blank">https://darkkingwang.github.io/my-web-page/</a></p>
         <p>完整源码仓库：<a href="https://github.com/darkkingwang/my-web-page" target="_blank">github.com/darkkingwang/my-web-page</a></p>
     </footer>
 
@@ -545,7 +549,7 @@
                 return;
             }
             if (!content) {
-                alert('请输入留言内容');
+                alert('请输入您想对我说的话');
                 return;
             }
 
