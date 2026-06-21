@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人兴趣展示网页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Microsoft Yahei", sans-serif;
+            color: #333;
+            background-color: #f5f7fa;
+            padding-top: 60px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #2c7be5;
+            color: white;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #d1e3ff;
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c7be5;
+        }
+
+        #home {
+            height: 400px;
+            background: linear-gradient(135deg, #2c7be5, #6ba3f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .banner-content h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .banner-content p {
+            font-size: 18px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .about-content {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .about-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #e0e6ed;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-text h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .about-text p {
+            line-height: 1.8;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            background: #f0f0f0;
+        }
+
+        .slide-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .slide-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255,255,255,0.9);
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        .dots-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: white;
+        }
+
+        .message-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #2c7be5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #1a66d1;
+        }
+
+        .message-list {
+            margin-top: 30px;
+        }
+
+        .message-list h4 {
+            margin-bottom: 15px;
+            color: #2c7be5;
+        }
+
+        .message-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .message-item:last-child {
+            border-bottom: none;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .message-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .message-time {
+            color: #999;
+        }
+
+        .message-content {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .empty-tip {
+            text-align: center;
+            color: #999;
+            padding: 20px 0;
+            font-size: 14px;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: #b0b8c1;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 60px;
+        }
+
+        #backTop {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 45px;
+            height: 45px;
+            background-color: #2c7be5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+            z-index: 99;
+            transition: background-color 0.3s;
+        }
+
+        #backTop:hover {
+            background-color: #1a66d1;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-title">个人兴趣主页</div>
+            <ul class="nav-menu">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#hobby">兴趣展示</a></li>
+                <li><a href="#message">留言板</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section id="home" class="section">
+        <div class="banner-content">
+            <h1>欢迎来到我的个人主页</h1>
+            <p>Web编程基础课程设计作品</p>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-content">
+            <div class="about-img">
+                <img src="https://storage.moegirl.org.cn/moegirl/commons/f/f0/%E8%99%8E%E7%89%99%E5%A4%8F%E5%A4%A9y%E5%A4%B4%E5%83%8F%EF%BC%88%E6%88%AA%E8%87%B32026%E5%B9%B4%EF%BC%89.jpg" alt="个人头像">
+            </div>
+            <div class="about-text">
+                <h3>你好，我是一名Web编程学习者</h3>
+                <p>
+                    我是枣庄学院信息科学与工程学院的学生，目前正在学习Web前端开发相关知识。
+                    我对前端开发有着浓厚的兴趣，喜欢通过代码实现各种精美的页面和有趣的交互效果。
+                    本页面是我的Web编程基础课程设计作品，使用原生HTML、CSS和JavaScript开发完成，
+                    涵盖了页面布局、样式美化、交互逻辑等前端基础能力。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="hobby" class="section">
+        <h2 class="section-title">兴趣展示</h2>
+        <div class="carousel">
+            <button class="carousel-btn prev-btn">&lt;</button>
+            <button class="carousel-btn next-btn">&gt;</button>
+            
+            <div class="slide-item">
+                <img src="https://wallpaperm.cmcm.com/d09302e14d700e23d778e09fed161749.jpg" alt="兴趣1">
+            </div>
+            <div class="slide-item">
+                <img src="https://i-blog.csdnimg.cn/blog_migrate/b44dee57f35ab8e9722b5237beea974d.png" alt="兴趣2">
+            </div>
+            <div class="slide-item">
+                <img src="https://pic.nximg.cn/file/20180719/20843248_171733913039_2.jpg" alt="兴趣3">
+            </div>
+            
+            <div class="dots-container">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="message" class="section">
+        <h2 class="section-title">留言板</h2>
+        <div class="message-box">
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" placeholder="请输入您的姓名">
+                </div>
+                <div class="form-group">
+                    <label for="contact">联系方式</label>
+                    <input type="text" id="contact" placeholder="请输入您的邮箱或手机号">
+                </div>
+                <div class="form-group">
+                    <label for="content">留言内容</label>
+                    <textarea id="content" placeholder="请输入您想对我说的话"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">提交留言</button>
+            </form>
+
+            <div class="message-list">
+                <h4>历史留言</h4>
+                <div id="messageList"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 个人兴趣展示网页 | Web编程基础课程设计</p>
+    </footer>
+
+    <button id="backTop">↑</button>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide-item');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            if (index < 0) currentIndex = totalSlides - 1;
+            else if (index >= totalSlides) currentIndex = 0;
+            else currentIndex = index;
+            
+            slides.forEach((slide, i) => {
+                slide.style.opacity = i === currentIndex ? '1' : '0';
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        showSlide(0);
+
+        let autoPlay = setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, 3000);
+
+        const carousel = document.querySelector('.carousel');
+        carousel.addEventListener('mouseenter', () => clearInterval(autoPlay));
+        carousel.addEventListener('mouseleave', () => {
+            autoPlay = setInterval(() => showSlide(currentIndex + 1), 3000);
+        });
+
+        document.querySelector('.prev-btn').addEventListener('click', () => showSlide(currentIndex - 1));
+        document.querySelector('.next-btn').addEventListener('click', () => showSlide(currentIndex + 1));
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => showSlide(i));
+        });
+
+        const messageForm = document.getElementById('messageForm');
+        const messageList = document.getElementById('messageList');
+
+        function getMessages() {
+            const data = localStorage.getItem('messageList');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveMessage(msg) {
+            const list = getMessages();
+            list.unshift(msg);
+            localStorage.setItem('messageList', JSON.stringify(list));
+        }
+
+        function renderMessages() {
+            const list = getMessages();
+            if (list.length === 0) {
+                messageList.innerHTML = '<div class="empty-tip">暂无留言，快来发布第一条留言吧</div>';
+                return;
+            }
+            let html = '';
+            list.forEach(item => {
+                html += `
+                <div class="message-item">
+                    <div class="message-header">
+                        <span class="message-name">${item.name}</span>
+                        <span class="message-time">${item.time}</span>
+                    </div>
+                    <div class="message-content">${item.content}</div>
+                </div>
+                `;
+            });
+            messageList.innerHTML = html;
+        }
+
+        function formatTime() {
+            const date = new Date();
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const h = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            return `${y}-${m}-${d} ${h}:${min}`;
+        }
+
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const contact = document.getElementById('contact').value.trim();
+            const content = document.getElementById('content').value.trim();
+            
+            if (!name) {
+                alert('请输入您的姓名');
+                return;
+            }
+            if (!contact) {
+                alert('请输入您的联系方式');
+                return;
+            }
+            if (!content) {
+                alert('请输入留言内容');
+                return;
+            }
+
+            const newMsg = {
+                name: name,
+                contact: contact,
+                content: content,
+                time: formatTime()
+            };
+            
+            saveMessage(newMsg);
+            renderMessages();
+            alert('留言提交成功！感谢您的反馈');
+            messageForm.reset();
+        });
+
+        renderMessages();
+
+        const backTop = document.getElementById('backTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backTop.style.display = 'block';
+            } else {
+                backTop.style.display = 'none';
+            }
+        });
+
+        backTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
